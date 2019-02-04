@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  {{template "inc/foot.html".}}
+  {{template "inc/excel.html".}}
+</head>
+  <body>
+    <div id="container">
+      <table bgcolor="#e1e9eb" border="0" cellpadding="0" cellspacing="0" >
+        <tbody>
+          <tr>
+            <td width="150" class="leftTd"  style="vertical-align:top">
+              {{template "inc/meta.html".}}
+            </td>
+            <td width="7">
+              <div class="pointer"></div>
+            </td>
+            
+            <td width="" style="vertical-align:top">
+              <div class="right">
+                <div class="current">
+                  当前位置：地址管理>地址管理
+                </div>
+                <div class="rightCont fix">
+
+
+                  <label span></label>
+                  <div class="zy_mainbox prizepool">
+                    <div class="zy_toolbar log_bar">
+                      <form action="/address/Query" method="post">
+                        <input id="Id" name="PriceName" type="text" placeholder="奖品名称" style="font-size: 20px" value={{.queryValue }}>
+                        <button id ="add"  class="zy_button queryclass" type="submit">查询</button>
+                      </form>
+                      <br>
+                      <div class="spantable">
+                        开始时间:<input id="start" type="text" class="put_date" > 结束时间 <input id="end" type="text" class="put_date">
+                          <!-- <input type="radio" name="scope" value="addr">test</input> -->
+                        <button id="saveSpan" class="btn btn-primary" data-scope="addr">导出</button>
+                      </div>
+                    </div>
+                    <iframe id="my_iframe" style="display:none;"></iframe>
+                    {{template "inc/js.html".}}
+                    <div class="award_manager jctable">
+                      <table class="award_managerlist ">
+                        <tbody>
+                          <tr class="th_bg">
+                            <th width="8%">奖品名称</th>
+                            <th width="6%">名字</th>
+                            <th width="12%">邮箱</th>
+                            <th width="8%">电话</th>
+                            <th width="20%">收货地址</th>
+                            <th width ="12%">快递单号</th>
+                            <th width="12%">时间</th>
+                            <th width="8%">操作</th>
+                          </tr>
+                          {{range $k,$v := .lists}}
+                          <tr>
+                            <td>{{$v.GiftName}}</td>
+                            <td>{{$v.Name}}</td>
+                            <td>{{$v.Email}}</td>
+                            <td>{{$v.Phone}}</td>
+                            <td>{{$v.Address}}</td>
+                            <td>{{$v.ExpressNo}}</td>
+                            <td>{{$v.Date|convertt}}</td>
+                            <td>
+                                <script type="text/javascript">
+                                    function rec()
+                                    {
+                                        var mymessage=confirm("是否删除该地址？");
+                                        if(mymessage==true)
+                                        {
+                                            window.location.href={{(printf  "/address/remove?id=%d" $v.Id )}}
+                                        }
+                                        else if(mymessage==false)
+                                        {
+                                            window.location.href="/address/management"
+                                        }
+                                    }
+                                </script>
+                              <span class="td_opt award_edit"><a href={{(printf  "/address/setting?id=%d" $v.Id )}} >编辑</a> </span>
+                              <input type="button" name="button" value="删除" onclick="rec()" />
+                            {{/*<span class="td_opt award_del"><a href={{(printf  "/address/remove?id=%d" $v.Id )}}   > 删除</a></span>*/}}
+                            </td>
+                          </tr>
+                          {{end}}
+                          <tr>
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <div class="page_div clearfix">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+</body>
+</html>
